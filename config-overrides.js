@@ -11,6 +11,7 @@ module.exports = function override(config, env) {
     'https': require.resolve('https-browserify'),
     'url': require.resolve('url'),
     'process': require.resolve('process/browser'),
+    'fs': false
 
   }
   config.plugins.push(
