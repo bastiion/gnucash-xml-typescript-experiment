@@ -31,10 +31,44 @@
         "type": "github"
       }
     },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1642609835,
+        "narHash": "sha256-ZwJnV4mdis28u5vH240ec2mrApuEJYJekn23qlTwJ8c=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "77aa71f66fd05d9e7b7d1c084865d703a8008ab7",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "ref": "nixos-21.11",
+        "type": "indirect"
+      }
+    },
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "xgen-pkgs": "xgen-pkgs"
+      }
+    },
+    "xgen-pkgs": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_2"
+      },
+      "locked": {
+        "lastModified": 1651065243,
+        "narHash": "sha256-RF79BU045zcibkmZkAEbwBaVDCr4JItUK7Sg4vPpgFE=",
+        "owner": "bastiion",
+        "repo": "xgen",
+        "rev": "96f5e3b46bcb221eb69c1b92b92207ac902cbd1b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "bastiion",
+        "repo": "xgen",
+        "type": "github"
       }
     }
   },

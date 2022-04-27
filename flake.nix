@@ -4,10 +4,14 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-21.11";
     flake-utils.url = "github:numtide/flake-utils";
+    xgen-pkgs.url = "github:bastiion/xgen";
   };
-  outputs = { self, nixpkgs, flake-utils }:
+  outputs = { self, nixpkgs, flake-utils, xgen-pkgs }:
     flake-utils.lib.eachDefaultSystem (system:
-      let pkgs = nixpkgs.legacyPackages.${system}; in
+    let 
+      pkgs = nixpkgs.legacyPackages.${system};
+      xgen = xgen-pkgs.packages.${system}.xgen;
+    in
       rec {
         packages = flake-utils.lib.flattenTree rec {
 
@@ -20,10 +24,23 @@
           gnucashXSD = pkgs.runCommand "gnucash-xsd" {
             buildInputs = with pkgs; [ jing ];
           } ''
+            mkdir -p $out
             ${pkgs.jing}/bin/trang -I rnc -O xsd ${gnucashRNC} $out/gnucash-v2.xsd
           '';
+          gnucashFastXMLTypes = pkgs.runCommand "gnucash-fast-xml-types" {
+            buildInputs = [ xgen ];
+          } ''
+            mkdir -p $out
+            cd $out
+            ${xgen}/bin/xgen -i ${gnucashXSD}/gnucash-v2.xsd -o gnucash-v2 -l TypeScript
+            mv gnucash-v2/${gnucashXSD}/* .
+            rm -r gnucash-v2
+            '';
         };
-        defaultPackage = packages.gnucashXSD;
+        devShell = pkgs.mkShell {
+            buildInputs = with pkgs; [ jing xgen ];
+        };
+        defaultPackage = packages.gnucashFastXMLTypes;
       }
     );
 }
